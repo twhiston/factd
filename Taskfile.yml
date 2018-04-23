@@ -1,0 +1,27 @@
+version: '2'
+
+tasks:
+
+  release:
+    cmds:
+     - goreleaser --snapshot --rm-dist
+
+  release:dist:
+    cmds:
+      - goreleaser
+
+  lint:
+    cmds:
+      - gometalinter --vendor ./...
+
+  test:
+    cmds:
+      - go test ./...
+
+  deps:
+    cmds:
+      - dep ensure --vendor-only
+
+  deps:update:
+    cmds:
+      - dep ensure --update

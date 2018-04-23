@@ -1,0 +1,57 @@
+# .goreleaser.yml
+# Build customization
+builds:
+  - binary: factd
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - 386
+      #- amd64p32
+      #- arm
+      #- arm64
+archive:
+  format: tar.gz
+  files:
+    - LICENSE
+    - README.md
+
+nfpm:
+  vendor: Tom Whiston
+  homepage: https://github.com/twhiston
+  maintainer: Tom Whiston <tom.whiston@gmail.com>
+
+  description: Collect System Facts
+
+  license: Apache 2.0
+
+  formats:
+    - deb
+    - rpm
+
+  bindir: /usr/bin
+
+  # Files or directories to add to your package (beyond the binary).
+  # Keys are source paths/globs to get the files from.
+  # Values are the destination locations of the files in the package.
+#  files:
+#    "scripts/etc/init.d/": "/etc/init.d"
+#    "path/**/glob": "/var/foo/glob"
+
+  # Config files to add to your package. They are about the same as
+  # the files keyword, except package managers treat them differently (while
+  # uninstalling, mostly).
+  # Keys are source paths/globs to get the files from.
+  # Values are the destination locations of the files in the package.
+#  config_files:
+#    "tmp/app_generated.conf": "/etc/app.conf"
+#    "conf/*.conf": "/etc/foo/"
+
+  # Scripts to execute during the installation of the package.
+  # Keys are the possible targets during the installation process
+  # Values are the paths to the scripts which will be executed
+#  scripts:
+#    preinstall: "scripts/preinstall.sh"
+#    postinstall: "scripts/postinstall.sh"
+#    preremove: "scripts/preremove.sh"
+#    postremove: "scripts/postremove.sh"
