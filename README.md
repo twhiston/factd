@@ -73,9 +73,10 @@ In addition to the facter facts mentioned above factd provides
 
 | name  | notes |
 |-------|-------|
-| docker| currently only container and image information is returned      |
+| docker| currently only running container and image information is returned      |
 
 ## Monitoring
 
 `/metrics` Prometheus Endpoint
+
 `/debug/pprof` pprof Endpoints
