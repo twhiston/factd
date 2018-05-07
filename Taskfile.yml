@@ -25,3 +25,11 @@ tasks:
   deps:update:
     cmds:
       - dep ensure --update
+
+  ci:image:build:
+    cmds:
+      - docker build -t registry.gitlab.com/twhiston/factd/test-deps:latest .gitlab/
+
+  ci:image:push:
+    cmds:
+      - docker push registry.gitlab.com/twhiston/factd/test-deps:latest
