@@ -11,27 +11,22 @@ variables:
   ORG_PATH: /go/src/github.com/twhiston
   APP_PATH: /go/src/github.com/twhiston/factd
 
-image: golang:1.10
+image: registry.gitlab.com/twhiston/factd/test-deps:latest
 
 before_script:
   - mkdir -p ${ORG_PATH}
   - ln -s $PWD  ${ORG_PATH}/
   - cd ${APP_PATH}
-  - go get -u github.com/golang/dep/cmd/dep
   - dep ensure --vendor-only
 
 lint:
   stage: test
   script:
-    - go get -u github.com/alecthomas/gometalinter
-    - gometalinter --install
     - gometalinter --vendor --deadline 120s ./...
 
 test:
   stage: test
   script:
-    - go get github.com/schrej/godacov
-    - go get -u github.com/haya14busa/goverage
     - goverage -v -coverprofile=coverage.out ./... 2> /dev/null
     - godacov -t "${CODACY_TOKEN}" -r ./coverage.out -c "${CI_COMMIT_SHA}" || true
     - go test -race -short $(go list ./... | grep -v /vendor/)
@@ -42,9 +37,6 @@ test:
 build:
   stage: build
   script:
-    - apt-get update -y
-    - apt-get install -y rpm
-    - go get github.com/goreleaser/goreleaser
     - goreleaser --snapshot
   artifacts:
     paths:
