@@ -2,6 +2,10 @@ version: '2'
 
 tasks:
 
+  build:
+    cmds:
+      - go build -o ./dist/factd
+
   release:
     cmds:
      - goreleaser --snapshot --rm-dist

@@ -4,7 +4,7 @@
 [![pipeline status](https://gitlab.com/twhiston/factd/badges/master/pipeline.svg)](https://gitlab.com/twhiston/factd/commits/master)
 
 Factd is a fact reporting daemon, similar to puppetlabs facte.
-It is intended to be run as a process on the target system, via ssytemd or in a container.
+It is intended to be run as a process on the target system, via systemd.
 Note that in a container it will need some extra privilages and mounts to be able to access the host information
 
 Facts are served to an http endpoint, as well as prometheus metrics and pprof data.

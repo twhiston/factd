@@ -1,0 +1,10 @@
+[Unit]
+Description=factd
+
+[Service]
+ExecStart=/usr/bin/factd serve
+Restart=always
+RestartSec=1s
+
+[Install]
+WantedBy=multi-user.target
