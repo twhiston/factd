@@ -1,10 +1,9 @@
 # TODO
 
-* fix formatters for nested lists
+* think about better structure and how to deal with metrics
 * plugin config
-* Events on change
-* Option to print on change events (mutually exclusive to poll)
-* Full github.com/shirou/gopsutil support
-* Caching of facts data
-* Stats endpoints
-* Instrumenting with prometheus
+* add github.com/shirou/gopsutil process support
+* packages plugin
+* plugin skeleton generate command
+* systemd unit
+* dockerfile with atomic command and docs about privilages (check the node scrapers and stuff on openshift and experiment a bit here)
