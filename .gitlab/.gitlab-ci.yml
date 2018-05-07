@@ -23,12 +23,16 @@ setup:
   stage: setup
   script:
     - dep ensure --vendor-only
+  tags:
+    - docker
 
 # this timeout needs to be crazy high!
 lint:
   stage: test
   script:
     - gometalinter --vendor --deadline 240s ./...
+  tags:
+    - docker
 
 test:
   stage: test
@@ -39,6 +43,8 @@ test:
   artifacts:
     paths:
       - coverage.out
+  tags:
+    - docker
 
 build:
   stage: build
@@ -47,3 +53,5 @@ build:
   artifacts:
     paths:
       - dist
+  tags:
+    - docker
