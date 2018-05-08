@@ -10,6 +10,7 @@ import (
 type JSONFormatter struct {
 }
 
+// Name returns the formatter name, in a format suitable for using as a map key
 func (f *JSONFormatter) Name() string {
 	return GetFormatterName(f)
 }

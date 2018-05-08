@@ -10,6 +10,7 @@ import (
 type YAMLFormatter struct {
 }
 
+// Name returns the formatter name, in a format suitable for using as a map key
 func (f *YAMLFormatter) Name() string {
 	return GetFormatterName(f)
 }

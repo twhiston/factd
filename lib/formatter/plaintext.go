@@ -13,6 +13,7 @@ import (
 type PlainTextFormatter struct {
 }
 
+// Name returns the formatter name, in a format suitable for using as a map key
 func (f *PlainTextFormatter) Name() string {
 	return GetFormatterName(f)
 }

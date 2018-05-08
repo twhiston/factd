@@ -34,9 +34,13 @@ type FakeFormatter struct {
 	facts map[string]common.FactList
 }
 
-func (ff *FakeFormatter) Get(group string, k string) (interface{}, bool) {
-	val, ok := ff.facts[group][k]
+func (f *FakeFormatter) Get(group string, k string) (interface{}, bool) {
+	val, ok := f.facts[group][k]
 	return val, ok
+}
+
+func (f *FakeFormatter) Name() string {
+	return formatter.GetFormatterName(f)
 }
 
 func NewFakeFormatter() *FakeFormatter {
@@ -45,12 +49,12 @@ func NewFakeFormatter() *FakeFormatter {
 	return &f
 }
 
-func (ff *FakeFormatter) Format(facts map[string]common.FactList) (*bytes.Buffer, error) {
+func (f *FakeFormatter) Format(facts map[string]common.FactList) (*bytes.Buffer, error) {
 	for k, v := range facts {
-		if ff.facts[k] == nil {
-			ff.facts[k] = make(map[string]interface{})
+		if f.facts[k] == nil {
+			f.facts[k] = make(map[string]interface{})
 		}
-		ff.facts[k] = v
+		f.facts[k] = v
 	}
 	var buf []byte
 	return bytes.NewBuffer(buf), nil
@@ -88,7 +92,7 @@ func TestNewNilConf(t *testing.T) {
 
 func TestNewConf(t *testing.T) {
 	conf := Config{
-		Formatter: formatter.NewPlainTextFormatter(),
+		Formatter: new(formatter.PlainTextFormatter),
 	}
 	f := New(conf)
 	if f == nil {
