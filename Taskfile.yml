@@ -65,7 +65,7 @@ tasks:
       - docker push tomwhiston/factd:latest
 
   run:docker:
-    deps: ["docker:build"]
+    deps: ["build:docker"]
     cmds:
       - task: image:run
         vars:
@@ -93,15 +93,12 @@ tasks:
 # Internal tasks, don't call these directly
   image:build:
     cmds:
-      - |
-        {{ .command }} build -t tomwhiston/factd:latest --file deployment/Dockerfile .
+      - "{{ .command }} build -t tomwhiston/factd:latest --file deployment/Dockerfile ."
 
   image:run:
     cmds:
-      - |
-        {{ .command }} run -it --privileged --ipc=host --net=host --pid=host -e HOST=/host -e NAME=rhel-tools -e IMAGE=rhel7/rhel-tools -v /run:/run -v /var/log:/var/log -v ~/:/root -v /etc/localtime:/etc/localtime -v /:/host tomwhiston/factd:latest run
+      - "{{ .command }} run --rm --privileged --ipc=host --net=host --pid=host -e HOST=/host -v /run:/run -v /var/log:/var/log -v ~/:/root -v /etc/localtime:/etc/localtime -v /:/host tomwhiston/factd:latest run"
 
   image:serve:
     cmds:
-      - |
-        {{ .command }} run -it --privileged --ipc=host --net=host --pid=host -e HOST=/host -e NAME=rhel-tools -e IMAGE=rhel7/rhel-tools -v /run:/run -v /var/log:/var/log -v ~/:/root -v /etc/localtime:/etc/localtime -v /:/host tomwhiston/factd:latest serve
+      - "{{ .command }} run -it --privileged --name=factd --ipc=host --net=host --pid=host -e HOST=/host -e NAME=factd -e IMAGE=tomwhiston/factd:latest -v /run:/run -v /var/log:/var/log -v ~/:/root -v /etc/localtime:/etc/localtime -v /:/host tomwhiston/factd:latest serve"
