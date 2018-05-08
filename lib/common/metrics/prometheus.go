@@ -8,8 +8,8 @@ var PromErrorCount = prometheus.NewCounter(prometheus.CounterOpts{
 	Help: "Number of non fatal errors during runtime.",
 })
 
-// PromEnabledPlugins contains the number of active plugins
+// PromEnabledPlugins contains the number of active plugin
 var PromEnabledPlugins = prometheus.NewGauge(prometheus.GaugeOpts{
 	Name: "enabled_plugins",
-	Help: "Number of enabled plugins.",
+	Help: "Number of enabled plugin.",
 })

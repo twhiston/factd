@@ -6,20 +6,20 @@ import (
 	"docker.io/go-docker/api/types"
 	"github.com/fatih/structs"
 	"github.com/twhiston/factd/lib/common"
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 )
 
 // The Docker plugin provides information about docker images and containers on the host
 type Docker struct{}
 
-// Name returns the plugins printable name, also used as the map key in the master fact list
+// Name returns the plugin printable name, also used as the map key in the master fact list
 func (p *Docker) Name() string {
-	return plugins.GetPluginName(&p)
+	return plugin.GetPluginName(&p)
 }
 
 // Report writes a set (or subset) of facts to a channel
-func (p *Docker) Report(facts chan<- plugins.ReportedFact) {
-	plugins.PollingReport(p, facts)
+func (p *Docker) Report(facts chan<- plugin.ReportedFact) {
+	plugin.PollingReport(p, facts)
 }
 
 // Facts gathers the actual fact data related to the plugin type

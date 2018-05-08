@@ -1,4 +1,4 @@
-package plugins
+package plugin
 
 import (
 	"github.com/twhiston/factd/lib/common"
@@ -22,15 +22,15 @@ type Plugin interface {
 	// If your report is a one off event and should not wait or poll the data will be persisted to the facts data for the duration of the run
 	// Usually Report is a wrapper for Fact, creating an object it can write to a channel
 	// A standard implementation of this would be
-	// func (p *MyPlugin)Report(facts chan<- plugins.ReportedFact){
-	// 	  plugins.PollingReport(p,facts)
+	// func (p *MyPlugin)Report(facts chan<- plugin.ReportedFact){
+	// 	  plugin.PollingReport(p,facts)
 	// }
 	Report(facts chan<- ReportedFact)
 }
 
 // ReportedFact represents a fact value
 // Because the reported fact is decoupled from its (potential) parent you need to specify the parent key in the fact report
-// The interface type returned must match the interface type returned by the plugins Facts() method
+// The interface type returned must match the interface type returned by the plugin Facts() method
 type ReportedFact struct {
 	// Top level key associated with this fact. Usually Plugin.Name()
 	Parent string

@@ -10,7 +10,7 @@ import (
 
 	d "github.com/shirou/gopsutil/disk"
 	"github.com/twhiston/factd/lib/common"
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 )
 
 var reDevBlacklist = regexp.MustCompile("^(dm-[0-9]+|loop[0-9]+)$")
@@ -18,14 +18,14 @@ var reDevBlacklist = regexp.MustCompile("^(dm-[0-9]+|loop[0-9]+)$")
 // The Disks plugin provides information about disks and partitions of the machine
 type Disks struct{}
 
-// Name returns the plugins printable name, also used as the map key in the master fact list
+// Name returns the plugin printable name, also used as the map key in the master fact list
 func (p *Disks) Name() string {
-	return plugins.GetPluginName(&p)
+	return plugin.GetPluginName(&p)
 }
 
 // Report writes a set (or subset) of facts to a channel
-func (p *Disks) Report(facts chan<- plugins.ReportedFact) {
-	plugins.PollingReport(p, facts)
+func (p *Disks) Report(facts chan<- plugin.ReportedFact) {
+	plugin.PollingReport(p, facts)
 }
 
 // Facts gathers the actual fact data related to the plugin type

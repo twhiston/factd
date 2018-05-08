@@ -1,12 +1,12 @@
 package user
 
 import (
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 	"testing"
 )
 
 func TestImplements(t *testing.T) {
-	var _ plugins.Plugin = (*User)(nil)
+	var _ plugin.Plugin = (*User)(nil)
 }
 
 func BenchmarkFactCollection(b *testing.B) {

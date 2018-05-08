@@ -4,7 +4,7 @@ import (
 	"github.com/fatih/structs"
 	n "github.com/shirou/gopsutil/net"
 	"github.com/twhiston/factd/lib/common"
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 	"net"
 	"strings"
 )
@@ -12,14 +12,14 @@ import (
 // The Net plugin provides information about networks
 type Net struct{}
 
-// Name returns the plugins printable name, also used as the map key in the master fact list
+// Name returns the plugin printable name, also used as the map key in the master fact list
 func (p *Net) Name() string {
-	return plugins.GetPluginName(&p)
+	return plugin.GetPluginName(&p)
 }
 
 // Report writes a set (or subset) of facts to a channel
-func (p *Net) Report(facts chan<- plugins.ReportedFact) {
-	plugins.PollingReport(p, facts)
+func (p *Net) Report(facts chan<- plugin.ReportedFact) {
+	plugin.PollingReport(p, facts)
 }
 
 // Facts gathers the actual fact data related to the plugin type

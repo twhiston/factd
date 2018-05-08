@@ -1,12 +1,12 @@
 package docker
 
 import (
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 	"testing"
 )
 
 func TestImplements(t *testing.T) {
-	var _ plugins.Plugin = (*Docker)(nil)
+	var _ plugin.Plugin = (*Docker)(nil)
 }
 
 func BenchmarkFactCollection(b *testing.B) {

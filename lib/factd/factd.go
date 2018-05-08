@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/imdario/mergo"
 	"github.com/twhiston/factd/lib/common"
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 
 	"github.com/twhiston/factd/lib/common/logging"
 )
@@ -14,7 +14,7 @@ import (
 type Factd struct {
 	facts         map[string]common.FactList
 	config        Config
-	reportChannel chan plugins.ReportedFact
+	reportChannel chan plugin.ReportedFact
 }
 
 // New returns new instance of Factd
@@ -22,7 +22,7 @@ func New(userConf Config) *Factd {
 	f := &Factd{
 		facts:         make(map[string]common.FactList),
 		config:        userConf,
-		reportChannel: make(chan plugins.ReportedFact),
+		reportChannel: make(chan plugin.ReportedFact),
 		//reportStopChannel: make(chan struct{}),
 	}
 	return f

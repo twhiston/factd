@@ -11,21 +11,21 @@ import (
 	"github.com/fatih/structs"
 	h "github.com/shirou/gopsutil/host"
 	"github.com/twhiston/factd/lib/common"
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 	"runtime"
 )
 
 // The Host plugin provides information about the host and OS
 type Host struct{}
 
-// Name returns the plugins printable name, also used as the map key in the master fact list
+// Name returns the plugin printable name, also used as the map key in the master fact list
 func (p *Host) Name() string {
-	return plugins.GetPluginName(&p)
+	return plugin.GetPluginName(&p)
 }
 
 // Report writes a set (or subset) of facts to a channel
-func (p *Host) Report(facts chan<- plugins.ReportedFact) {
-	plugins.PollingReport(p, facts)
+func (p *Host) Report(facts chan<- plugin.ReportedFact) {
+	plugin.PollingReport(p, facts)
 }
 
 // Facts gathers the actual fact data related to the plugin type

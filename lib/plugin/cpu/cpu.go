@@ -7,20 +7,20 @@ import (
 	"github.com/fatih/structs"
 	c "github.com/shirou/gopsutil/cpu"
 	"github.com/twhiston/factd/lib/common"
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 )
 
 // The CPU plugin provides information about the cpu's in the machine
 type CPU struct{}
 
-// Name returns the plugins printable name, also used as the map key in the master fact list
+// Name returns the plugin printable name, also used as the map key in the master fact list
 func (p *CPU) Name() string {
-	return plugins.GetPluginName(&p)
+	return plugin.GetPluginName(&p)
 }
 
 // Report writes a set (or subset) of facts to a channel
-func (p *CPU) Report(facts chan<- plugins.ReportedFact) {
-	plugins.OneShotReport(p, facts)
+func (p *CPU) Report(facts chan<- plugin.ReportedFact) {
+	plugin.OneShotReport(p, facts)
 }
 
 // Facts gathers the actual fact data related to the plugin type

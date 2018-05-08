@@ -1,11 +1,11 @@
-package plugins
+package plugin
 
 import "github.com/twhiston/factd/lib/common"
 
 // The Version plugin provides information about the factd version number
 type Version struct{}
 
-// Name returns the plugins printable name, also used as the map key in the master fact list
+// Name returns the plugin printable name, also used as the map key in the master fact list
 func (p *Version) Name() string {
 	return GetPluginName(&p)
 }

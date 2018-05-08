@@ -12,20 +12,20 @@ import (
 	"github.com/twhiston/factd/lib/common/logging"
 	"github.com/twhiston/factd/lib/factd"
 	formatter2 "github.com/twhiston/factd/lib/formatter"
-	plugins2 "github.com/twhiston/factd/lib/plugins"
-	"github.com/twhiston/factd/lib/plugins/cpu"
-	"github.com/twhiston/factd/lib/plugins/disks"
-	"github.com/twhiston/factd/lib/plugins/docker"
-	"github.com/twhiston/factd/lib/plugins/host"
-	"github.com/twhiston/factd/lib/plugins/load"
-	"github.com/twhiston/factd/lib/plugins/mem"
-	"github.com/twhiston/factd/lib/plugins/net"
-	"github.com/twhiston/factd/lib/plugins/user"
+	plugins2 "github.com/twhiston/factd/lib/plugin"
+	"github.com/twhiston/factd/lib/plugin/cpu"
+	"github.com/twhiston/factd/lib/plugin/disks"
+	"github.com/twhiston/factd/lib/plugin/docker"
+	"github.com/twhiston/factd/lib/plugin/host"
+	"github.com/twhiston/factd/lib/plugin/load"
+	"github.com/twhiston/factd/lib/plugin/mem"
+	"github.com/twhiston/factd/lib/plugin/net"
+	"github.com/twhiston/factd/lib/plugin/user"
 )
 
 var cfgFile string
 
-// List of all available plugins.
+// List of all available plugin.
 // To add a new plugin add it to this slice
 var factdPlugins = []plugins2.Plugin{
 	new(cpu.CPU),
@@ -69,8 +69,8 @@ func init() {
 	// These flags are also bound to viper so that they can be set in a config file as well as here
 	// Throughout the cli program the values will only be taken from viper and not directly from the flags
 	rootCmd.PersistentFlags().String("format", "yaml", "plaintext/json/yaml")
-	rootCmd.PersistentFlags().StringSlice("include", []string{}, "what plugins to run")
-	rootCmd.PersistentFlags().StringSlice("exclude", []string{}, "what plugins to exclude")
+	rootCmd.PersistentFlags().StringSlice("include", []string{}, "what plugin to run")
+	rootCmd.PersistentFlags().StringSlice("exclude", []string{}, "what plugin to exclude")
 
 	//make a map out of the plugin list for easier selection and filtering
 	for _, v := range factdPlugins {
@@ -134,10 +134,10 @@ func resolveFormatter(c *factd.Config, cName string) {
 
 func resolvePlugins(c *factd.Config) {
 
-	//Add plugins
+	//Add plugin
 	included := viper.GetStringSlice("include")
 	if len(included) == 0 || included[0] == "all" {
-		//Add all plugins
+		//Add all plugin
 		for k, v := range pluginMap {
 			c.Plugins[k] = v
 		}
@@ -149,7 +149,7 @@ func resolvePlugins(c *factd.Config) {
 		}
 	}
 
-	//Remove plugins
+	//Remove plugin
 	excluded := viper.GetStringSlice("exclude")
 	if len(excluded) > 0 {
 		for _, v := range excluded {

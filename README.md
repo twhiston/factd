@@ -21,7 +21,7 @@ factd currently is only fully supported in linux, open to pull requests that cha
 
 ## Adding New Plugins
 
-Resolving the plugins to load is done at the command level. tbd.....
+Resolving the plugin to load is done at the command level. tbd.....
 
 ## Factd/Facter Parity
 

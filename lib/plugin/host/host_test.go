@@ -1,12 +1,12 @@
 package host
 
 import (
-	"github.com/twhiston/factd/lib/plugins"
+	"github.com/twhiston/factd/lib/plugin"
 	"testing"
 )
 
 func TestImplements(t *testing.T) {
-	var _ plugins.Plugin = (*Host)(nil)
+	var _ plugin.Plugin = (*Host)(nil)
 }
 
 func BenchmarkFactCollection(b *testing.B) {
