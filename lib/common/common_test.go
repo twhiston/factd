@@ -108,54 +108,6 @@ func TestConvertNetmask(t *testing.T) {
 	}
 }
 
-func TestGetHostEtc(t *testing.T) {
-	testValue := "test_value"
-	err := os.Setenv("HOST_ETC", testValue)
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-	value := GetHostEtc()
-	if strings.Compare(value, testValue) != 0 {
-		t.Fatalf("%v != %v", value, testValue)
-	}
-}
-
-func TestGetHostEtcNotSet(t *testing.T) {
-	expectedVal := "/etc"
-	err := os.Unsetenv("HOST_ETC")
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-	value := GetHostEtc()
-	if strings.Compare(value, expectedVal) != 0 {
-		t.Fatalf("%v != %v", value, expectedVal)
-	}
-}
-
-func TestGetHostProc(t *testing.T) {
-	testValue := "test_value"
-	err := os.Setenv("HOST_PROC", testValue)
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-	value := GetHostProc()
-	if strings.Compare(value, testValue) != 0 {
-		t.Fatalf("%v != %v", value, testValue)
-	}
-}
-
-func TestGetHostProcNotSet(t *testing.T) {
-	expectedVal := "/proc"
-	err := os.Unsetenv("HOST_PROC")
-	if err != nil {
-		t.Fatalf("%v", err)
-	}
-	value := GetHostProc()
-	if strings.Compare(value, expectedVal) != 0 {
-		t.Fatalf("%v != %v", value, expectedVal)
-	}
-}
-
 func TestGetHostSys(t *testing.T) {
 	testValue := "test_value"
 	err := os.Setenv("HOST_SYS", testValue)

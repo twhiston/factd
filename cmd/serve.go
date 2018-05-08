@@ -36,10 +36,6 @@ By default the endpoint is root, and the server is on port 8080
 There is no authentication provided, it is strongly advised that you secure all routes.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		logging.Fatal(viper.BindPFlag("async", cmd.Flags().Lookup("async")))
-		logging.Fatal(viper.BindPFlag("prometheus", cmd.Flags().Lookup("prometheus")))
-		logging.Fatal(viper.BindPFlag("pprof", cmd.Flags().Lookup("pprof")))
-
 		factd := setupFactD()
 		//Always use json formatting
 		conf := factd.GetConfig()
@@ -89,4 +85,7 @@ func init() {
 	serveCmd.PersistentFlags().Bool("prometheus", true, "if true publish a prometheus endpoint")
 	serveCmd.PersistentFlags().Bool("pprof", true, "if true publish a pprof endpoint")
 
+	logging.Fatal(viper.BindPFlag("async", serveCmd.PersistentFlags().Lookup("async")))
+	logging.Fatal(viper.BindPFlag("prometheus", serveCmd.PersistentFlags().Lookup("prometheus")))
+	logging.Fatal(viper.BindPFlag("pprof", serveCmd.PersistentFlags().Lookup("pprof")))
 }

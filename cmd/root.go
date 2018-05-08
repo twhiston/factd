@@ -45,7 +45,7 @@ var factdFormatters = []formatter2.Formatter{
 	new(formatter2.YAMLFormatter),
 }
 
-// internal variable used for plugin resolving
+// internal variable used for resolving
 var pluginMap = map[string]plugins2.Plugin{}
 var formatterMap = map[string]formatter2.Formatter{}
 
@@ -54,9 +54,6 @@ var rootCmd = &cobra.Command{
 	Use:   "factd",
 	Short: "Facts Daemon",
 	Long:  ``,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -71,10 +68,8 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.facter.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.factd.yml)")
 
-	// These flags are also bound to viper so that they can be set in a config file as well as here
-	// Throughout the cli program the values will only be taken from viper and not directly from the flags
 	rootCmd.PersistentFlags().String("format", "yaml", "plaintext/json/yaml")
 	rootCmd.PersistentFlags().StringSlice("include", []string{}, "what plugin to run")
 	rootCmd.PersistentFlags().StringSlice("exclude", []string{}, "what plugin to exclude")
@@ -105,7 +100,8 @@ func initConfig() {
 		viper.SetConfigName(".factd")
 	}
 
-	viper.AutomaticEnv() // read in environment variables that match
+	viper.SetEnvPrefix("factd") // will be uppercased automatically
+	viper.AutomaticEnv()        // read in environment variables that match
 
 	//bind root command values
 	logging.Fatal(viper.BindPFlag("format", rootCmd.Flags().Lookup("format")))
@@ -116,6 +112,11 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+
+	logging.HandleError(viper.BindEnv("host_var", "HOST_VAR"))
+	logging.HandleError(viper.BindEnv("host_etc", "HOST_ETC"))
+	logging.HandleError(viper.BindEnv("host_proc", "HOST_PROC"))
+	logging.HandleError(viper.BindEnv("host_sys", "HOST_SYS"))
 
 }
 

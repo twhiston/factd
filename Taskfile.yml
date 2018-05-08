@@ -4,15 +4,22 @@ tasks:
 
   build:
     cmds:
+      - mkdir -p ./dist
       - go build -o ./dist/factd
+    generates:
+      - ./dist/factd
 
   release:
     cmds:
      - goreleaser --snapshot --rm-dist
+    generates:
+      - dist/
 
   release:dist:
     cmds:
       - goreleaser
+    generates:
+      - dist/
 
   lint:
     cmds:
@@ -25,10 +32,17 @@ tasks:
   deps:
     cmds:
       - dep ensure --vendor-only
+    sources:
+      - Gopkg.lock
+      - Gopkg.toml
+    generates:
+      - vendor/
 
   deps:update:
     cmds:
       - dep ensure --update
+    generates:
+      - vendor/
 
   ci:image:build:
     cmds:
@@ -37,3 +51,57 @@ tasks:
   ci:image:push:
     cmds:
       - docker push registry.gitlab.com/twhiston/factd/test-deps:latest
+
+  build:docker:
+    deps: ["build"]
+    cmds:
+      - task: image:build
+        vars:
+          command: docker
+
+  push:docker:
+    deps: ["docker:build"]
+    cmds:
+      - docker push tomwhiston/factd:latest
+
+  run:docker:
+    deps: ["docker:build"]
+    cmds:
+      - task: image:run
+        vars:
+          command: docker
+
+  run:atomic:
+    deps: ["build:docker"]
+    cmds:
+      - atomic run tomwhiston/factd:latest
+
+  build:podman:
+    deps: ["build"]
+    cmds:
+      - task: image:build
+        vars:
+          command: docker
+
+  run:podman:
+    deps: ["build:podman"]
+    cmds:
+      - task: image:run
+        vars:
+          command: podman
+
+# Internal tasks, don't call these directly
+  image:build:
+    cmds:
+      - |
+        {{ .command }} build -t tomwhiston/factd:latest --file deployment/Dockerfile .
+
+  image:run:
+    cmds:
+      - |
+        {{ .command }} run -it --privileged --ipc=host --net=host --pid=host -e HOST=/host -e NAME=rhel-tools -e IMAGE=rhel7/rhel-tools -v /run:/run -v /var/log:/var/log -v ~/:/root -v /etc/localtime:/etc/localtime -v /:/host tomwhiston/factd:latest run
+
+  image:serve:
+    cmds:
+      - |
+        {{ .command }} run -it --privileged --ipc=host --net=host --pid=host -e HOST=/host -e NAME=rhel-tools -e IMAGE=rhel7/rhel-tools -v /run:/run -v /var/log:/var/log -v ~/:/root -v /etc/localtime:/etc/localtime -v /:/host tomwhiston/factd:latest serve

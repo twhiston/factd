@@ -10,24 +10,54 @@ Note that in a container it will need some extra privilages and mounts to be abl
 Facts are served to an http endpoint, as well as prometheus metrics and pprof data.
 
 factd is under heavy development, expect breaking changes until v1.0
-factd currently is only fully supported in linux, open to pull requests that change this.
+factd currently is only fully supported in linux, please submit pull requests that change this.
+
+## Config
+
+All command line options can also be given in a `factd.yml` config file or as env vars prepended with `FACTD_`
 
 ## Environmental Variables
+
+As factd uses [gopsutil](https://github.com/shirou/gopsutil) under the hood for some functionality you should also be aware of it's env vars
 
 * `HOST_ETC` - specify alternative path to `/etc` directory
 * `HOST_PROC` - specify alternative path to `/proc` mountpoint
 * `HOST_SYS` - specify alternative path to `/sys` mountpoint
+* `HOST_VAR` - specify alternative path to `/var` mountpoint
 
+## Containers
+
+Although a container is provided it is not the preferred way to run factd.
+
+There are some things to be aware of when running in a container:
+
+* It is a super privilaged container in every way!
+* The results you get will differ from running it on the host in a few ways
+    * Host filesystem mounted at /host and env vars set to use this
+    * Extra volumes
+    * Different $PATH
+    * Different Host Id
+    * Different User
+    * IsVirtual true in container (docker only)
+    * VirtualizationRole guest in container (docker only)
+    * VirtualizationSystem set in container (docker only)
+
+Check the taskfile for running and building the container with the awesome, and daemonless, [podman](https://github.com/projectatomic/libpod)
 
 ## Adding New Plugins/Formatters
 
 Use the tmpl command to generate new plugin boilerplate.
 See tmpl --help for more details.
 
+## Adding New Commands
+
+Use [cobra](https://github.com/spf13/cobra) for command boilerplate
+When adding new commands bind your (p)flags to viper and use viper and not the cmd for data, this allows the user to supply a configuration file supplying flag values. gopsutil env vars are also available from viper.
+
 ## Factd/Facter Parity
 
-Factd aims to have as much parity with facter's (modern facts)[https://docs.puppet.com/facter/3.3/core_facts.html#modern-facts] set as is reasonable,
-note that this does not extend to the names or structure of the facts returned, only the feature set.
+Factd aims to have as much parity with facter's [modern facts](https://docs.puppet.com/facter/3.3/core_facts.html#modern-facts) feature set as is reasonable,
+note that this does not extend to the names or structure of the facts returned.
 
 | facter                | factd   | notes                 |
 |-----------------------|---------|-----------------------|
@@ -74,10 +104,17 @@ In addition to the facter facts mentioned above factd provides
 
 | name  | notes |
 |-------|-------|
-| docker| currently only running container and image information is returned      |
+| docker| containers & images |
 
 ## Monitoring
 
 `/metrics` Prometheus Endpoint
 
+You can disable prometheus monitoring by passing `--prometheus=false`
+
 `/debug/pprof` pprof Endpoints
+
+You can disable pprof by passing `--pprof=false`
+
+`/healthz` Endpoint
+

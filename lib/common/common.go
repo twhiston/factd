@@ -82,31 +82,11 @@ func ConvertNetmask(in uint8) (string, error) {
 		octets[4]), nil
 }
 
-//TODO - this is plugin config for things that use gopsutil
-
-// GetHostEtc gets an env var that is shared with gopsutil
-func GetHostEtc() string {
-	hostEtc := os.Getenv("HOST_ETC")
-	if hostEtc == "" {
-		hostEtc = "/etc"
-	}
-	return hostEtc
-}
-
-// GetHostSys gets an env var that is shared with gopsutil
+//TODO - this is plugin config for disks
 func GetHostSys() string {
 	hostSys := os.Getenv("HOST_SYS")
 	if hostSys == "" {
 		hostSys = "/sys"
 	}
 	return hostSys
-}
-
-// GetHostProc gets an env var that is shared with gopsutil
-func GetHostProc() string {
-	hostProc := os.Getenv("HOST_PROC")
-	if hostProc == "" {
-		hostProc = "/proc"
-	}
-	return hostProc
 }
