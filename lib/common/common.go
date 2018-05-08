@@ -83,6 +83,8 @@ func ConvertNetmask(in uint8) (string, error) {
 }
 
 //TODO - this is plugin config for disks
+
+// GetHostSys gets an env var that is shared with gopsutil
 func GetHostSys() string {
 	hostSys := os.Getenv("HOST_SYS")
 	if hostSys == "" {
