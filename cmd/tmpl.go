@@ -14,7 +14,7 @@ var tmplCmd = &cobra.Command{
 	Short: "Create a template skeleton to extend factd",
 	Long: `Subcommands of tmpl render various templates for items that can be used to extend factd.
 As factd itself does not manage the plugins they must be added via the config.
-In the standard factd setup this means adding them to the factdPlugins slice in cmd/root.go
+In the standard factd setup this means adding them to the factdPlugins/factdFormatters slice in cmd/root.go
 Once this is done they will become available via the --include or --exclude options.
 All plugins are on by default`,
 }

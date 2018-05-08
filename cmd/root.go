@@ -39,8 +39,15 @@ var factdPlugins = []plugins2.Plugin{
 	new(plugins2.Version),
 }
 
+var factdFormatters = []formatter2.Formatter{
+	new(formatter2.PlainTextFormatter),
+	new(formatter2.JSONFormatter),
+	new(formatter2.YAMLFormatter),
+}
+
 // internal variable used for plugin resolving
 var pluginMap = map[string]plugins2.Plugin{}
+var formatterMap = map[string]formatter2.Formatter{}
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -75,6 +82,9 @@ func init() {
 	//make a map out of the plugin list for easier selection and filtering
 	for _, v := range factdPlugins {
 		pluginMap[v.Name()] = v
+	}
+	for _, v := range factdFormatters {
+		formatterMap[v.Name()] = v
 	}
 }
 
@@ -117,19 +127,12 @@ func setupFactD() *factd.Factd {
 	return factd.New(*conf)
 }
 
-// TODO - make this less crappy
 func resolveFormatter(c *factd.Config, cName string) {
-
-	switch cName {
-	case "plaintext":
-		c.Formatter = formatter2.NewPlainTextFormatter()
-	case "json":
-		c.Formatter = formatter2.NewJSONFormatter()
-	case "yaml":
-		c.Formatter = formatter2.NewYAMLFormatter()
-	default:
-		logging.Fatal(errors.New("cannot find formatter"))
+	val, ok := formatterMap[cName]
+	if !ok {
+		logging.Fatal(errors.New("cant find formatter"))
 	}
+	c.Formatter = val
 }
 
 func resolvePlugins(c *factd.Config) {

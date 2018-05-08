@@ -19,9 +19,10 @@ factd currently is only fully supported in linux, open to pull requests that cha
 * `HOST_SYS` - specify alternative path to `/sys` mountpoint
 
 
-## Adding New Plugins
+## Adding New Plugins/Formatters
 
-Resolving the plugin to load is done at the command level. tbd.....
+Use the tmpl command to generate new plugin boilerplate.
+See tmpl --help for more details.
 
 ## Factd/Facter Parity
 

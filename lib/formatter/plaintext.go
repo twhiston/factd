@@ -13,13 +13,12 @@ import (
 type PlainTextFormatter struct {
 }
 
-// NewPlainTextFormatter returns new plain-text formatter
-func NewPlainTextFormatter() *PlainTextFormatter {
-	return &PlainTextFormatter{}
+func (f *PlainTextFormatter) Name() string {
+	return GetFormatterName(f)
 }
 
 // Format prints-out facts in k=>v format
-func (pf PlainTextFormatter) Format(facts map[string]common.FactList) (*bytes.Buffer, error) {
+func (f *PlainTextFormatter) Format(facts map[string]common.FactList) (*bytes.Buffer, error) {
 	var b bytes.Buffer
 	writer := bufio.NewWriter(&b)
 	for k, v := range facts {

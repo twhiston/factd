@@ -10,13 +10,12 @@ import (
 type JSONFormatter struct {
 }
 
-// NewJSONFormatter returns new JSON formatter
-func NewJSONFormatter() *JSONFormatter {
-	return &JSONFormatter{}
+func (f *JSONFormatter) Name() string {
+	return GetFormatterName(f)
 }
 
 // Format prints-out facts in JSON format
-func (jf *JSONFormatter) Format(facts map[string]common.FactList) (*bytes.Buffer, error) {
+func (f *JSONFormatter) Format(facts map[string]common.FactList) (*bytes.Buffer, error) {
 	b, err := j.MarshalIndent(facts, "", "  ")
 	if err != nil {
 		return nil, err

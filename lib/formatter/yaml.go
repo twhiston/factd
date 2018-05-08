@@ -10,13 +10,12 @@ import (
 type YAMLFormatter struct {
 }
 
-// NewYAMLFormatter returns new YAML formatter
-func NewYAMLFormatter() *YAMLFormatter {
-	return &YAMLFormatter{}
+func (f *YAMLFormatter) Name() string {
+	return GetFormatterName(f)
 }
 
 // Format marshals a map of FactList's keyed by string to YAML
-func (jf *YAMLFormatter) Format(facts map[string]common.FactList) (*bytes.Buffer, error) {
+func (f *YAMLFormatter) Format(facts map[string]common.FactList) (*bytes.Buffer, error) {
 	b, err := yaml.Marshal(facts)
 	if err != nil {
 		return nil, err
