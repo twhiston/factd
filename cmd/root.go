@@ -40,9 +40,10 @@ var factdPlugins = []plugins2.Plugin{
 }
 
 var factdFormatters = []formatter2.Formatter{
-	new(formatter2.PlainTextFormatter),
+	&formatter2.PlainTextFormatter{Divider: " => "},
 	new(formatter2.JSONFormatter),
 	new(formatter2.YAMLFormatter),
+	&formatter2.FlattenedFormatter{Divider: ".", KvDivider: " "},
 }
 
 // internal variable used for resolving

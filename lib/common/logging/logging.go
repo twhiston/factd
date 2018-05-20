@@ -1,9 +1,15 @@
 package logging
 
 import (
+	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/twhiston/factd/lib/common/metrics"
+	"os"
 )
+
+func init() {
+	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr})
+}
 
 // HandleError will report an error to the logging, increase the prom error count and continue]
 // Therefore this should be used to handle non fatal errors
