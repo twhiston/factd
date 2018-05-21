@@ -21,6 +21,7 @@ import (
 	"github.com/twhiston/factd/lib/plugin/mem"
 	"github.com/twhiston/factd/lib/plugin/net"
 	"github.com/twhiston/factd/lib/plugin/user"
+	"reflect"
 )
 
 var cfgFile string
@@ -72,6 +73,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.factd.yml)")
 
 	rootCmd.PersistentFlags().String("format", "yaml", "plaintext/json/yaml")
+	rootCmd.PersistentFlags().StringSlice("format-option", []string{}, "A value to pass to formatter config, must be in the form of key=value")
 	rootCmd.PersistentFlags().StringSlice("include", []string{}, "what plugin to run")
 	rootCmd.PersistentFlags().StringSlice("exclude", []string{}, "what plugin to exclude")
 
@@ -106,6 +108,7 @@ func initConfig() {
 
 	//bind root command values
 	logging.Fatal(viper.BindPFlag("format", rootCmd.Flags().Lookup("format")))
+	logging.Fatal(viper.BindPFlag("format-option", rootCmd.Flags().Lookup("format-option")))
 	logging.Fatal(viper.BindPFlag("include", rootCmd.Flags().Lookup("include")))
 	logging.Fatal(viper.BindPFlag("exclude", rootCmd.Flags().Lookup("exclude")))
 
@@ -135,6 +138,27 @@ func resolveFormatter(c *factd.Config, cName string) {
 		logging.Fatal(errors.New("cant find formatter"))
 	}
 	c.Formatter = val
+	//TODO - process the input into something we can use
+	//fillConfig(&c.Formatter, )
+}
+
+func fillConfig(f *formatter2.Formatter, config map[string]interface{}) error {
+	ft := reflect.TypeOf(f)
+	fv := reflect.ValueOf(f)
+	for i := 0; i < ft.NumField(); i++ {
+		field := ft.Field(i)
+		fData, ok := config[field.Name]
+		if !ok {
+			return errors.New("cannot construct valid config from input. Field: " + field.Name)
+		}
+		switch _ := fv.(type) {
+		case string:
+			fv.Field(i).SetString(fData.(string))
+		case int, int64:
+			fv.Field(i).SetInt(fData.(int64))
+		}
+	}
+	return nil
 }
 
 func resolvePlugins(c *factd.Config) {
