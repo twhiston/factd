@@ -1,6 +1,7 @@
 # factd
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/85ca8315d2884dbca0b716a800310103)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=twhiston/factd&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/85ca8315d2884dbca0b716a800310103)](https://www.codacy.com?utm_source=github.com&utm_medium=referral&utm_content=twhiston/factd&utm_campaign=Badge_Coverage)
+[![Go Report Card](https://goreportcard.com/badge/github.com/twhiston/factd)](https://goreportcard.com/report/github.com/twhiston/factd)
 [![pipeline status](https://gitlab.com/twhiston/factd/badges/master/pipeline.svg)](https://gitlab.com/twhiston/factd/commits/master)
 
 Factd is a fact reporting daemon, similar to puppetlabs facte.
