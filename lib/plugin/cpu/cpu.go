@@ -1,13 +1,11 @@
 package cpu
 
 import (
-	"fmt"
-	"strconv"
-
-	"github.com/fatih/structs"
 	c "github.com/shirou/gopsutil/cpu"
 	"github.com/twhiston/factd/lib/common"
 	"github.com/twhiston/factd/lib/plugin"
+
+	"strconv"
 )
 
 // The CPU plugin provides information about the cpu's in the machine
@@ -39,15 +37,15 @@ func (p *CPU) Facts() (common.FactList, error) {
 		return nil, err
 	}
 
+	data["Info"] = cpuInfo
+
 	physIDs := make(map[uint64]interface{})
 	for _, v := range cpuInfo {
-		physID, err := strconv.ParseUint(v.PhysicalID, 10, 32)
+		pid, err := strconv.ParseUint(v.PhysicalID, 10, 32)
 		if err == nil {
-			physIDs[physID] = structs.Map(v)
+			physIDs[pid] = nil
 		}
-		data[fmt.Sprintf("processor%v", v.CPU)] = v.ModelName
 	}
 	data["PhysicalProcessorCount"] = len(physIDs)
-	data["ProcessorDetails"] = physIDs
 	return data, nil
 }

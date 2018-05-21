@@ -30,6 +30,10 @@ As factd uses [gopsutil](https://github.com/shirou/gopsutil) under the hood for 
 
 Although a container is provided it is not the preferred way to run factd.
 
+```
+docker run -it --name factd --rm --privileged --ipc=host --net=host --pid=host -e HOST=/host -v /run:/run -v /var/log:/var/log -v /etc/localtime:/etc/localtime -v /:/host tomwhiston/factd:latest
+```
+
 There are some things to be aware of when running in a container:
 
 * It is a super privilaged container in every way!

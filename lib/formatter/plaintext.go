@@ -7,10 +7,13 @@ import (
 	"github.com/twhiston/factd/lib/common"
 	"github.com/twhiston/factd/lib/common/logging"
 	"io"
+	"reflect"
+	"strconv"
 )
 
 // PlainTextFormatter prints-out facts in k=>v format
 type PlainTextFormatter struct {
+	Divider string
 }
 
 // Name returns the formatter name, in a format suitable for using as a map key
@@ -24,37 +27,42 @@ func (f *PlainTextFormatter) Format(facts map[string]common.FactList) (*bytes.Bu
 	writer := bufio.NewWriter(&b)
 	for k, v := range facts {
 		fmt.Fprintf(writer, "%v\n", k)
-		for fn, f := range v {
-			indentPrint(f, fn, 1, " => ", writer)
+		for fn, fd := range v {
+			f.indentPrint(fd, fn, 1, writer)
 		}
 	}
 	logging.Fatal(writer.Flush())
 	return &b, nil
 }
 
-// TODO - gross :P
-func indentPrint(data interface{}, name string, amount int, divider string, writer io.Writer) {
-	switch val := data.(type) {
-	case common.FactList:
-		fmt.Fprintf(writer, "%v%v\n", indent(name, amount), divider)
+func (f *PlainTextFormatter) indentPrint(data interface{}, name string, amount int, writer io.Writer) {
+	rt := reflect.TypeOf(data)
+	switch rt.Kind() {
+	case reflect.Slice, reflect.Array:
+		fmt.Fprintf(writer, "%v%v\n", indent(name, amount), f.Divider)
 		amount++
-		for k, v := range val {
-			indentPrint(v, k, amount, divider, writer)
+		s := reflect.ValueOf(data)
+		for i := 0; i < s.Len(); i++ {
+			val := s.Index(i).Interface()
+			f.indentPrint(val, strconv.Itoa(i), amount, writer)
 		}
-	case map[string]interface{}:
-		fmt.Fprintf(writer, "%v%v\n", indent(name, amount), divider)
+	case reflect.Map:
+		fmt.Fprintf(writer, "%v%v\n", indent(name, amount), f.Divider)
 		amount++
-		for k, v := range val {
-			indentPrint(v, k, amount, divider, writer)
+		s := reflect.ValueOf(data)
+		keys := s.MapKeys()
+		for i := 0; i < s.Len(); i++ {
+			val := s.MapIndex(keys[i]).Interface()
+			f.indentPrint(val, keys[i].String(), amount, writer)
 		}
-	case map[string]string:
-		fmt.Fprintf(writer, "%v%v\n", indent(name, amount), divider)
-		amount++
-		for k, v := range val {
-			indentPrint(v, k, amount, divider, writer)
+	case reflect.Struct:
+		s := reflect.ValueOf(data)
+		for i := 0; i < s.NumField(); i++ {
+			val := s.Field(i).Interface()
+			f.indentPrint(val, s.Type().Field(i).Name, amount, writer)
 		}
 	default:
-		fmt.Fprintf(writer, "%v%v%v\n", indent(name, amount), divider, val)
+		fmt.Fprintf(writer, "%v%v%v\n", indent(name, amount), f.Divider, data)
 	}
 }
 
